@@ -95,7 +95,7 @@ $result = $conn->query($sql);
     <title>库存列表</title>
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 </head>
 
 <body class="bg-light">
@@ -193,6 +193,6 @@ $result = $conn->query($sql);
     </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/gh/tofsjonas/sortable/sortable.min.js"></script>
+<script src="assets/js/sortable.min.js"></script>
 </body>
 </html>

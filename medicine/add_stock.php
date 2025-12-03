@@ -63,7 +63,7 @@ $location_list = $conn->query("SELECT location_id, name FROM locations ORDER BY 
     <title>添加库存</title>
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 </head>
 
 <body class="bg-light">
