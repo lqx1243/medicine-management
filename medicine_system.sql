@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1
--- 生成日期： 2025-12-03 11:37:09
+-- 生成日期： 2025-12-04 04:14:12
 -- 服务器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -109,6 +109,13 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- 转存表中的数据 `users`
+--
+
+INSERT INTO `users` (`user_id`, `username`, `password_hash`, `created_at`) VALUES
+(1, 'admin', '$2y$10$yMVbCEeLZHyo2W1jcFdC7OSFh9iQ/SRTFDWtWK0V0GQBKMlHPel5W', '2025-12-02 01:04:21');
+
+--
 -- 转储表的索引
 --
 
@@ -192,7 +199,7 @@ ALTER TABLE `stock`
 -- 使用表AUTO_INCREMENT `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- 限制导出的表
