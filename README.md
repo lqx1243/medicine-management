@@ -10,6 +10,7 @@ medicine management
 
 ---
 ## 📜 Install
+Windows + XAMPP  
 1. Copy the [medicine](./medicine) folder into your `/XAMPP/htdocs`  
 2. Create the database table in MYSQL required by `medicine_system.sql`  
    The database initially contained only one user's data; the other tables were empty.  
