@@ -18,7 +18,7 @@ medicine management
 4. Configure database connection information at `/XAMPP/htdocs/config/db.php`
    The default HOST is `localhost`  
    The default USER is `root`  
-   The default PASS is ``  
+   The default PASS is (none)  
    The default NAME is `medicine_system`  
 
 
