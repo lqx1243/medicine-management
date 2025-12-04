@@ -2,8 +2,6 @@
 medicine management
 
 
-http://localhost/medicine/auth/login.php
-
 ## 📚 Table of Contents
 - [Install](#-Install)
 - [Limitation](#-limitation)
