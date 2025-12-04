@@ -3,10 +3,22 @@ I have noticed that since the COVID-19 pandemic, many families or individuals ha
 
 
 ## 📚 Table of Contents
+- [Install](#-Main-functions)
 - [Install](#-Install)
-- [Limitation](#-limitation)
 - [License](#-License)
 - [Contributors](#-contributors)
+
+
+
+---
+## 📜 Main functions
+This system mainly has the following functions:  
+  Add drug information  
+  Add storage location information  
+  Linked processing of inventory quantity  
+  Reminder about near-expired/expired medications  
+
+
 
 ---
 ## 📜 Install
