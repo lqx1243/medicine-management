@@ -3,7 +3,7 @@ I have noticed that since the COVID-19 pandemic, many families or individuals ha
 
 
 ## 📚 Table of Contents
-- [Install](#-Main-functions)
+- [Main functions](#-Main-functions)
 - [Install](#-Install)
 - [License](#-License)
 - [Contributors](#-contributors)
