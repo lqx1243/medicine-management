@@ -15,7 +15,7 @@ medicine management
 3. Visit `http://localhost/medicine/auth/login.php`  
    The default username is `admin`  
    The default password is `123456`  
-4. Configure database connection information at `/XAMPP/htdocs/config/db.php`
+4. Configure database connection information at `/XAMPP/htdocs/config/db.php`  
    The default HOST is `localhost`  
    The default USER is `root`  
    The default PASS is (none)  
