@@ -1,4 +1,7 @@
-<?php require_once "auth/check.php"; ?>
+<?php
+require_once "auth/check.php";
+require_once "config/db.php"; //数据库连接
+?>
 <!DOCTYPE html>
 <html lang="zh-cn">
 

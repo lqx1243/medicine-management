@@ -1,19 +1,8 @@
-<?php require_once "auth/check.php"; ?>
 <?php
-/* --------------------------
-    数据库连接配置
---------------------------- */
-$host = "localhost";
-$user = "root";
-$pass = "";
-$dbname = "medicine_system";
-
-$conn = new mysqli($host, $user, $pass, $dbname);
-
-if ($conn->connect_error) {
-    die("连接失败: " . $conn->connect_error);
-}
-
+require_once "auth/check.php";
+require_once "config/db.php"; //数据库连接
+?>
+<?php
 /* --------------------------
     处理表单提交
 --------------------------- */

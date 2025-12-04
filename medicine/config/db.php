@@ -1,7 +1,7 @@
 <?php
 $DB_HOST = "localhost";
-$DB_USER = "meduser";
-$DB_PASS = "StrongPassword123!";
+$DB_USER = "root";
+$DB_PASS = "";
 $DB_NAME = "medicine_system";
 
 $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
