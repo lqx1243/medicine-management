@@ -1,5 +1,5 @@
 # medicine management
-medicine management
+I have noticed that since the COVID-19 pandemic, many families or individuals have chosen to stockpile some medicines at home for emergencies. However, people often forget the expiration dates of medicines. This project is mainly used to manage and check the expiration dates of medicines so that expired medicines can be updated and disposed of in a timely manner.  
 
 
 ## 📚 Table of Contents
