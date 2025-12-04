@@ -10,6 +10,7 @@ http://localhost/medicine/auth/login.php
 - [License](#-License)
 - [Contributors](#-contributors)
 
+---
 ## 📜 Install
 1. Copy the [medicine](./medicine) folder into your `/XAMPP/htdocs`  
 2. Create the database table in MYSQL required by `medicine_system.sql`
@@ -17,6 +18,15 @@ http://localhost/medicine/auth/login.php
    The default username is `admin`  
    The default password is `123456`  
 
+
+
+
+---
+## 📜 License
+This project is licensed under the GNU General Public License v3.0 (GPL-3.0).
+This means any modified versions or derivative works must also be distributed under the same license.
+
+See the [LICENSE](LICENSE) file for full details.
 
 
 ---
