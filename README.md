@@ -13,10 +13,10 @@ I have noticed that since the COVID-19 pandemic, many families or individuals ha
 ---
 ## 📜 Main functions
 This system mainly has the following functions:  
-  Add drug information  
-  Add storage location information  
-  Linked processing of inventory quantity  
-  Reminder about near-expired/expired medications  
+- Add drug information  
+- Add storage location information  
+- Linked processing of inventory quantity  
+- Reminder about near-expired/expired medications  
 
 
 
