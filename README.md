@@ -4,6 +4,7 @@ I have noticed that since the COVID-19 pandemic, many families or individuals ha
 
 ## 📚 Table of Contents
 - [Main functions](#-Main-functions)
+- [Screenshots](#-Screenshots)
 - [Install](#-Install)
 - [Requirements](#-Requirements)
 - [Roadmap](#-Roadmap)
@@ -21,6 +22,14 @@ This system mainly has the following functions:
 - Reminder about near-expired/expired medications  
 
 
+---
+## 📜 Screenshots
+
+Here are some interface previews of the system:
+
+![Login page](DemoScreenshots/login.jpg)
+![Dashboard](DemoScreenshots/dashboard.jpg)
+![Add stock](DemoScreenshots/addstock.jpg)
 
 ---
 ## 📜 Install
