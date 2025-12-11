@@ -5,6 +5,7 @@ I have noticed that since the COVID-19 pandemic, many families or individuals ha
 ## 📚 Table of Contents
 - [Main functions](#-Main-functions)
 - [Install](#-Install)
+- [Roadmap](#-Roadmap)
 - [License](#-License)
 - [Contributors](#-contributors)
 
@@ -35,6 +36,12 @@ Windows + XAMPP
    The default PASS is (none)  
    The default NAME is `medicine_system`  
 
+
+---
+## 📜 Roadmap
+- [ ] Add multi-user support
+- [ ] Add mobile-friendly UI
+- [ ] Add barcode scanning for medicines
 
 
 ---
