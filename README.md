@@ -5,6 +5,7 @@ I have noticed that since the COVID-19 pandemic, many families or individuals ha
 ## 📚 Table of Contents
 - [Main functions](#-Main-functions)
 - [Install](#-Install)
+- [Requirements](#-Requirements)
 - [Roadmap](#-Roadmap)
 - [License](#-License)
 - [Contributors](#-contributors)
@@ -35,6 +36,14 @@ Windows + XAMPP
    The default USER is `root`  
    The default PASS is (none)  
    The default NAME is `medicine_system`  
+
+---
+## 📜 Requirements
+- PHP >= 7.4
+- MySQL >= 5.7
+- XAMPP or any Apache + PHP environment
+- Browser that supports ES6
+
 
 
 ---
