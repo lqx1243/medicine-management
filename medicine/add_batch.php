@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // 没有库存记录 → 直接新建
             $conn->query("
                 INSERT INTO stock (drug_id, location_id, quantity, unit, min_quantity)
-                VALUES ($drug_id, $location_id, $quantity, '未知', 0)
+                VALUES ($drug_id, $location_id, $quantity, '未知', 1)
             ");
         }
 
