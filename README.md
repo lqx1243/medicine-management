@@ -86,7 +86,7 @@ See the [LICENSE](LICENSE) file for full details.
 
 ---
 ## 📜 Contributors
-This section will not display correctly if the project is in a private setting.  
+
 <a href="https://github.com/lqx1243/medicine-management/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=lqx1243/medicine-management" />
 </a>
