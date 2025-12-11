@@ -24,12 +24,14 @@ This system mainly has the following functions:
 
 ---
 ## 📜 Screenshots
-
+<details>
+<summary>Click to expand screenshots</summary>
 Here are some interface previews of the system:
 
 ![Login page](DemoScreenshots/login.jpg)
 ![Dashboard](DemoScreenshots/dashboard.jpg)
 ![Add stock](DemoScreenshots/addstock.jpg)
+</details>
 
 ---
 ## 📜 Install
