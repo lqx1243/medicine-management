@@ -5,6 +5,7 @@ I have noticed that since the COVID-19 pandemic, many families or individuals ha
 ## 📚 Table of Contents
 - [Main functions](#-Main-functions)
 - [Screenshots](#-Screenshots)
+- [Language support](#-Language-Support)
 - [Install](#-Install)
 - [Requirements](#-Requirements)
 - [Roadmap](#-Roadmap)
@@ -32,6 +33,17 @@ Here are some interface previews of the system:
 ![Dashboard](DemoScreenshots/dashboard.jpg)
 ![Add stock](DemoScreenshots/addstock.jpg)
 </details>
+
+
+---
+## 📜 Language Support
+
+- The current version of this project **only supports Chinese (Simplified)**.
+- All UI text, database content, and most code comments are written in Chinese.
+- English support may be added in future versions.
+
+
+
 
 ---
 ## 📜 Install
