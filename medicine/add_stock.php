@@ -24,6 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->bind_param("iiisi", $drug_id, $location_id, $quantity, $unit, $min_quantity);
 
     if ($stmt->execute()) {
+        $detail = "新增库存：药品ID={$drug_id}，位置ID={$location_id}，数量={$quantity}，单位={$unit}，下限={$min_quantity}";
+        write_log($conn, "add_stock", intval($drug_id), $detail);
         header("Location: add_stock.php?success=1");
         exit();
     } else {

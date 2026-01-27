@@ -25,6 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->bind_param("sssss", $name, $type, $spec, $storage, $remark);
 
     if ($stmt->execute()) {
+        $drug_id = $conn->insert_id;
+        $detail = "新增药品：名称={$name}，剂型={$type}，规格={$spec}，保存要求={$storage}";
+        if ($remark !== "") {
+            $detail .= "，备注={$remark}";
+        }
+        write_log($conn, "add_drug", $drug_id, $detail);
         $message = "<div class='alert alert-success'>药品已成功添加！</div>";
     } else {
         $message = "<div class='alert alert-danger'>添加失败：" . $stmt->error . "</div>";

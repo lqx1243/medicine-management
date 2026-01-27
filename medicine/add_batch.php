@@ -25,8 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->bind_param("issii", $drug_id, $batch_number, $expire_date, $quantity, $location_id);
 
     if ($stmt->execute()) {
-        header("Location: add_batch.php?success=1");
-
         /* --- 批次添加成功后，更新库存 --- */
         $check = $conn->query("
             SELECT stock_id, quantity 
@@ -49,6 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ");
         }
 
+        $detail = "新增批次：药品ID={$drug_id}，批号={$batch_number}，有效期={$expire_date}，数量={$quantity}，位置ID={$location_id}";
+        write_log($conn, "add_batch", $drug_id, $detail);
+
+        header("Location: add_batch.php?success=1");
         exit();
     } else {
         $message = "<div class='alert alert-danger'>添加失败：" . $stmt->error . "</div>";

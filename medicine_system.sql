@@ -76,6 +76,7 @@ CREATE TABLE `logs` (
   `action` varchar(100) NOT NULL COMMENT '操作类型，如添加、更新库存、删除',
   `drug_id` int(11) DEFAULT NULL COMMENT '涉及药品',
   `detail` text DEFAULT NULL COMMENT '详细描述',
+  `username` varchar(50) DEFAULT NULL COMMENT '操作用户',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='系统操作日志，用于审计或追踪操作';
 

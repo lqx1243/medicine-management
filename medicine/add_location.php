@@ -22,6 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->bind_param("ss", $name, $description);
 
         if ($stmt->execute()) {
+            $detail = "新增存放位置：名称={$name}";
+            if ($description !== "") {
+                $detail .= "，描述={$description}";
+            }
+            write_log($conn, "add_location", null, $detail);
             header("Location: location_list.php?added=1");
             exit();
         } else {

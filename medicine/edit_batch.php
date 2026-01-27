@@ -41,6 +41,8 @@ $old_quantity = intval($batch['quantity']);
 $old_location = intval($batch['location_id']);
 $drug_id      = intval($batch['drug_id']);
 $location_name = $batch['location_name'] ?? "未设置位置";
+$old_batch_number = $batch['batch_number'];
+$old_expire_date = $batch['expire_date'];
 
 /* --------------------------
     表单提交 → 更新数据库
@@ -94,6 +96,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 ");
             }
         }
+
+        $detail = "更新批次：批次ID={$batch_id}，药品ID={$drug_id}，批号={$old_batch_number}→{$batch_number}，有效期={$old_expire_date}→{$expire_date}，数量={$old_quantity}→{$new_quantity}";
+        write_log($conn, "update_batch", $drug_id, $detail);
 
         /* --------------------------------------
             3. 最后再跳转
