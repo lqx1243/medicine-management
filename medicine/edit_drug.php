@@ -25,6 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $storage = $_POST["storage_requirement"];
     $remark = $_POST["remark"];
 
+    $old = $conn->query("SELECT name, type, spec, storage_requirement, remark FROM drugs WHERE drug_id = $drug_id LIMIT 1");
+    $old_drug = $old ? $old->fetch_assoc() : null;
+
     $stmt = $conn->prepare("
         UPDATE drugs 
         SET name=?, type=?, spec=?, storage_requirement=?, remark=?
@@ -34,6 +37,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->bind_param("sssssi", $name, $type, $spec, $storage, $remark, $drug_id);
 
     if ($stmt->execute()) {
+        $old_name = $old_drug['name'] ?? '';
+        $old_type = $old_drug['type'] ?? '';
+        $old_spec = $old_drug['spec'] ?? '';
+        $old_storage = $old_drug['storage_requirement'] ?? '';
+        $old_remark = $old_drug['remark'] ?? '';
+
+        $detail = "更新药品：药品ID={$drug_id}，名称={$old_name}→{$name}，剂型={$old_type}→{$type}，规格={$old_spec}→{$spec}，保存要求={$old_storage}→{$storage}，备注={$old_remark}→{$remark}";
+        write_log($conn, "update_drug", $drug_id, $detail);
         // 修改成功，跳回列表页
         header("Location: drugs_list.php?updated=1");
         exit();

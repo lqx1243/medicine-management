@@ -63,6 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->bind_param("issi", $new_min_quantity, $new_unit, $new_location_id, $stock_id);
 
     if ($stmt->execute()) {
+        $detail = "更新库存：库存ID={$stock_id}，药品ID={$drug_id}，位置ID={$location_id}→{$new_location_id}，单位={$unit}→{$new_unit}，下限={$min_quantity}→{$new_min_quantity}";
+        write_log($conn, "update_stock", $drug_id, $detail);
         header("Location: stock_list.php?updated=1");
         exit();
     } else {
