@@ -37,6 +37,7 @@ $result = $conn->query("SELECT * FROM locations ORDER BY location_id DESC");
 
 <!DOCTYPE html>
 <html lang="zh-cn">
+
 <head>
     <meta charset="UTF-8">
     <title>存放位置列表</title>
@@ -46,54 +47,65 @@ $result = $conn->query("SELECT * FROM locations ORDER BY location_id DESC");
 
 <body class="bg-light">
 
-<div class="container mt-5">
+    <div class="container mt-5">
 
-    <div class="card shadow">
+        <div class="card shadow">
 
-        <div class="card-header bg-secondary text-white">
-            <h3>存放位置列表</h3>
-        </div>
+            <div class="card-header bg-secondary text-white">
+                <h3>存放位置列表</h3>
+            </div>
 
-        <div class="card-body">
+            <div class="card-body">
 
-            <?= $message ?>
+                <?php
+                if (isset($_GET['updated'])) {
+                    $message = "<div class='alert alert-success'>位置已更新。</div>";
+                }
+                ?>
 
-            <a href="add_location.php" class="btn btn-primary mb-3">➕ 添加位置</a>
+                <?= $message ?>
 
-            <table class="table table-bordered table-striped align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>位置名称</th>
-                        <th>描述</th>
-                        <th style="width:150px;">操作</th>
-                    </tr>
-                </thead>
+                <a href="add_location.php" class="btn btn-primary mb-3">➕ 添加位置</a>
 
-                <tbody>
-                <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr>
-                        <td><?= $row["location_id"] ?></td>
-                        <td><?= htmlspecialchars($row["name"]) ?></td>
-                        <td><?= htmlspecialchars($row["description"]) ?></td>
-                        <td>
-                            <a class="btn btn-danger btn-sm"
-                               onclick="return confirm('确定删除该位置？')"
-                               href="location_list.php?delete=<?= $row['location_id'] ?>">
-                               删除
-                            </a>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-                </tbody>
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>位置名称</th>
+                            <th>描述</th>
+                            <th style="width:150px;">操作</th>
+                        </tr>
+                    </thead>
 
-            </table>
-            <a href="dashboard.php" class="btn btn-secondary">返回</a>
+                    <tbody>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?= $row["location_id"] ?></td>
+                                <td><?= htmlspecialchars($row["name"]) ?></td>
+                                <td><?= htmlspecialchars($row["description"]) ?></td>
+                                <td>
+                                    <a class="btn btn-warning btn-sm"
+                                        href="edit_location.php?id=<?= $row['location_id'] ?>">
+                                        编辑
+                                    </a>
+                                    <a class="btn btn-danger btn-sm"
+                                        onclick="return confirm('确定删除该位置？')"
+                                        href="location_list.php?delete=<?= $row['location_id'] ?>">
+                                        删除
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+
+                </table>
+                <a href="dashboard.php" class="btn btn-secondary">返回</a>
+            </div>
+
         </div>
 
     </div>
 
-</div>
-
 </body>
+
 </html>
