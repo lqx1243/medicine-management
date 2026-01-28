@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once "../config/db.php";
+require_once "../config/i18n.php";
 
 // 如果已经登录 → 跳主页
 if (isset($_SESSION["user"])) {
@@ -64,14 +65,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    $error = "用户名或密码错误。";
+    $error = t("login_error");
 }
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <title>登录</title>
+    <title><?= t("login_title") ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -79,8 +80,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <div class="container mt-5" style="max-width:400px;">
 
     <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h3>系统登录</h3>
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3><?= t("login_title") ?></h3>
+            <div class="text-end">
+                <a class="text-white text-decoration-none" href="<?= language_switch_url("zh") ?>"><?= t("language_zh") ?></a>
+                <span class="text-white-50 mx-1">|</span>
+                <a class="text-white text-decoration-none" href="<?= language_switch_url("en") ?>"><?= t("language_en") ?></a>
+            </div>
         </div>
 
         <div class="card-body">
@@ -92,21 +98,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <form method="POST">
 
                 <div class="mb-3">
-                    <label class="form-label">用户名</label>
+                    <label class="form-label"><?= t("username") ?></label>
                     <input type="text" name="username" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">密码</label>
+                    <label class="form-label"><?= t("password") ?></label>
                     <input type="password" name="password" class="form-control" required>
                 </div>
 
                 <div class="form-check mb-3">
                     <input class="form-check-input" type="checkbox" name="remember">
-                    <label class="form-check-label">保持登录（7天）</label>
+                    <label class="form-check-label"><?= t("remember_me") ?></label>
                 </div>
 
-                <button class="btn btn-primary w-100" type="submit">登录</button>
+                <button class="btn btn-primary w-100" type="submit"><?= t("login") ?></button>
 
             </form>
 

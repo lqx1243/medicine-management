@@ -63,7 +63,8 @@ function require_permission($permission)
 {
     if (!user_can($permission)) {
         http_response_code(403);
-        echo "无权限访问该功能。";
+        $message = function_exists("t") ? t("no_permission_access") : "无权限访问该功能。";
+        echo $message;
         exit();
     }
 }

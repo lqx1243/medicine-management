@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Location: add_batch.php?success=1");
         exit();
     } else {
-        $message = "<div class='alert alert-danger'>添加失败：" . $stmt->error . "</div>";
+        $message = "<div class='alert alert-danger'>" . sprintf(t("add_failed"), $stmt->error) . "</div>";
     }
 
     $stmt->close();
@@ -73,7 +73,7 @@ $drugs = $conn->query("SELECT drug_id, name FROM drugs ORDER BY name ASC");
 
 <head>
     <meta charset="UTF-8">
-    <title>添加批次</title>
+    <title><?= t("add_batch_title") ?></title>
 
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 
@@ -93,14 +93,19 @@ $drugs = $conn->query("SELECT drug_id, name FROM drugs ORDER BY name ASC");
     <div class="container mt-5">
 
         <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h3>添加批次</h3>
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h3><?= t("add_batch_title") ?></h3>
+                <div>
+                    <a class="text-white text-decoration-none" href="<?= language_switch_url("zh") ?>"><?= t("language_zh") ?></a>
+                    <span class="text-white-50 mx-1">|</span>
+                    <a class="text-white text-decoration-none" href="<?= language_switch_url("en") ?>"><?= t("language_en") ?></a>
+                </div>
             </div>
             <div class="card-body">
 
                 <?php
                 if (isset($_GET['success'])) {
-                    echo "<div class='alert alert-success'>批次添加成功！</div>";
+                    echo "<div class='alert alert-success'>" . t("batch_add_success") . "</div>";
                 }
                 echo $message;
                 ?>
@@ -109,9 +114,9 @@ $drugs = $conn->query("SELECT drug_id, name FROM drugs ORDER BY name ASC");
 
                     <!-- 药品选择 -->
                     <div class="mb-3">
-                        <label class="form-label">药品 *</label>
+                        <label class="form-label"><?= t("drug_label") ?></label>
                         <select class="form-select" name="drug_id" id="drug_select" required>
-                            <option value="">请选择药品</option>
+                            <option value=""><?= t("select_drug") ?></option>
                             <?php while ($row = $drugs->fetch_assoc()): ?>
                                 <option value="<?= $row['drug_id'] ?>"><?= $row['name'] ?></option>
                             <?php endwhile; ?>
@@ -120,27 +125,27 @@ $drugs = $conn->query("SELECT drug_id, name FROM drugs ORDER BY name ASC");
 
                     <!-- 批号 -->
                     <div class="mb-3">
-                        <label class="form-label">批号（可选）</label>
+                        <label class="form-label"><?= t("batch_number_optional") ?></label>
                         <input type="text" class="form-control" name="batch_number">
                     </div>
 
                     <!-- 有效期 -->
                     <div class="mb-3">
-                        <label class="form-label">有效期 *</label>
+                        <label class="form-label"><?= t("expire_date_label") ?></label>
                         <input type="date" class="form-control" name="expire_date" lang="en" required>
                     </div>
 
                     <!-- 数量 -->
                     <div class="mb-3">
-                        <label class="form-label">数量 *</label>
+                        <label class="form-label"><?= t("quantity_label") ?></label>
                         <input type="number" class="form-control" name="quantity" required>
                     </div>
 
                     <!-- 存放位置 -->
                     <div class="mb-3">
-                        <label class="form-label">存放位置 *</label>
+                        <label class="form-label"><?= t("location_label") ?></label>
                         <select class="form-select" name="location_id" required>
-                            <option value="">请选择位置</option>
+                            <option value=""><?= t("select_location") ?></option>
                             <?php
                             $loc = $conn->query("SELECT location_id, name FROM locations ORDER BY name ASC");
                             while ($row = $loc->fetch_assoc()):
@@ -150,8 +155,8 @@ $drugs = $conn->query("SELECT drug_id, name FROM drugs ORDER BY name ASC");
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-success">提交</button>
-                    <a href="dashboard.php" class="btn btn-secondary">返回</a>
+                    <button type="submit" class="btn btn-success"><?= t("submit") ?></button>
+                    <a href="dashboard.php" class="btn btn-secondary"><?= t("return") ?></a>
 
                 </form>
 
@@ -163,7 +168,7 @@ $drugs = $conn->query("SELECT drug_id, name FROM drugs ORDER BY name ASC");
     <script>
         $(document).ready(function() {
             $('#drug_select').select2({
-                placeholder: "搜索药品名称…",
+                placeholder: "<?= t("search_drug_placeholder") ?>",
                 allowClear: true
             });
         });

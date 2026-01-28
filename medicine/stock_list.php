@@ -42,7 +42,7 @@ if (isset($_GET['recalc'])) {
         ");
     }
 
-    $recalc_message = "<div class='alert alert-success'>库存已根据批次数据重新计算并更新！</div>";
+    $recalc_message = "<div class='alert alert-success'>" . t("stock_recalc_done") . "</div>";
 }
 
 
@@ -57,7 +57,7 @@ if (isset($_GET['delete'])) {
 
     $conn->query("DELETE FROM stock WHERE stock_id = $delete_id");
 
-    $delete_message = "<div class='alert alert-success'>库存记录已删除。</div>";
+    $delete_message = "<div class='alert alert-success'>" . t("stock_deleted") . "</div>";
 }
 
 /* --------------------------
@@ -85,7 +85,7 @@ $result = $conn->query($sql);
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <title>库存列表</title>
+    <title><?= t("stock_list_title") ?></title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -98,7 +98,7 @@ $result = $conn->query($sql);
     <div class="card shadow">
 
         <div class="card-header bg-info text-white">
-            <h3>库存列表</h3>
+            <h3><?= t("stock_list_title") ?></h3>
         </div>
 
         <div class="card-body">
@@ -108,23 +108,32 @@ $result = $conn->query($sql);
             <?php echo $recalc_message; ?>
 
 
-            <?php if (user_can("stock.manage")): ?>
-                <a href="add_stock.php" class="btn btn-primary mb-3">➕ 添加库存</a>
-                <a href="stock_list.php?recalc=1" class="btn btn-secondary mb-3">
-                    🔄 重新计算库存
-                </a>
-            <?php endif; ?>
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                <div class="d-flex gap-2">
+                    <?php if (user_can("stock.manage")): ?>
+                        <a href="add_stock.php" class="btn btn-primary">➕ <?= t("add_stock") ?></a>
+                        <a href="stock_list.php?recalc=1" class="btn btn-secondary">
+                            🔄 <?= t("stock_recalc") ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
+                <div>
+                    <a class="text-decoration-none" href="<?= language_switch_url("zh") ?>"><?= t("language_zh") ?></a>
+                    <span class="text-muted mx-1">|</span>
+                    <a class="text-decoration-none" href="<?= language_switch_url("en") ?>"><?= t("language_en") ?></a>
+                </div>
+            </div>
             <table class="table table-bordered table-striped align-middle sortable">
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>
-                        <th>药品名称</th>
-                        <th>存放位置</th>
-                        <th>数量</th>
-                        <th>单位</th>
-                        <th>下限</th>
-                        <th>最后更新</th>
-                        <th style="width:150px;">操作</th>
+                        <th><?= t("drug_name") ?></th>
+                        <th><?= t("location_name") ?></th>
+                        <th><?= t("quantity") ?></th>
+                        <th><?= t("unit") ?></th>
+                        <th><?= t("min_quantity") ?></th>
+                        <th><?= t("updated_at") ?></th>
+                        <th style="width:150px;"><?= t("actions") ?></th>
                     </tr>
                 </thead>
 
@@ -146,14 +155,14 @@ $result = $conn->query($sql);
                             <?php 
                                 echo $row['location_name'] ? 
                                 htmlspecialchars($row['location_name']) : 
-                                "<span class='text-muted'>未设置</span>";
+                                "<span class='text-muted'>" . t("not_set") . "</span>";
                             ?>
                         </td>
 
                         <td>
                             <?php 
                                 echo $row['quantity'];
-                                if ($low) echo " <span class='badge bg-danger'>不足</span>";
+                                if ($low) echo " <span class='badge bg-danger'>" . t("low") . "</span>";
                             ?>
                         </td>
 
@@ -165,16 +174,16 @@ $result = $conn->query($sql);
                             <?php if (user_can("stock.manage")): ?>
                                 <a class="btn btn-warning btn-sm"
                                     href="edit_stock.php?id=<?php echo $row['stock_id']; ?>">
-                                    编辑
+                                    <?= t("edit") ?>
                                 </a>
 
                                 <a class="btn btn-danger btn-sm"
-                                    onclick="return confirm('确认删除该库存记录？');"
+                                    onclick="return confirm('<?= t("confirm_delete_stock") ?>');"
                                     href="stock_list.php?delete=<?php echo $row['stock_id']; ?>">
-                                    删除
+                                    <?= t("delete") ?>
                                 </a>
                             <?php else: ?>
-                                <span class="text-muted">无权限</span>
+                                <span class="text-muted"><?= t("no_permission") ?></span>
                             <?php endif; ?>
                         </td>
 
@@ -182,12 +191,12 @@ $result = $conn->query($sql);
                 <?php
                     }
                 } else {
-                    echo "<tr><td colspan='8' class='text-center'>暂无库存记录。</td></tr>";
+                    echo "<tr><td colspan='8' class='text-center'>" . t("no_stock_records") . "</td></tr>";
                 }
                 ?>
                 </tbody>
             </table>
-            <a href="dashboard.php" class="btn btn-secondary">返回</a>
+            <a href="dashboard.php" class="btn btn-secondary"><?= t("return") ?></a>
         </div>
     </div>
 
