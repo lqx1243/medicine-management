@@ -1,6 +1,8 @@
 <?php
 require_once "auth/check.php";
 require_once "config/db.php"; //数据库连接
+require_once "config/permissions.php";
+require_permission("batch.view");
 ?>
 <?php
 /* --------------------------
@@ -9,6 +11,7 @@ require_once "config/db.php"; //数据库连接
 $delete_message = "";
 
 if (isset($_GET['delete'])) {
+    require_permission("batch.manage");
 
     $delete_id = intval($_GET['delete']);
 
@@ -92,7 +95,9 @@ $result = $conn->query($sql);
 
             <?php echo $delete_message; ?>
 
-            <a href="add_batch.php" class="btn btn-primary mb-3">➕ 添加批次</a>
+            <?php if (user_can("batch.manage")): ?>
+                <a href="add_batch.php" class="btn btn-primary mb-3">➕ 添加批次</a>
+            <?php endif; ?>
 
             <table class="table table-bordered table-striped align-middle">
                 <thead class="table-dark">
@@ -134,16 +139,20 @@ $result = $conn->query($sql);
                         <td><?= $row["quantity"] ?></td>
 
                         <td>
-                            <a class="btn btn-warning btn-sm"
-                                href="edit_batch.php?id=<?php echo $row['batch_id']; ?>">
-                                编辑
-                            </a>
+                            <?php if (user_can("batch.manage")): ?>
+                                <a class="btn btn-warning btn-sm"
+                                    href="edit_batch.php?id=<?php echo $row['batch_id']; ?>">
+                                    编辑
+                                </a>
 
-                            <a class="btn btn-danger btn-sm"
-                               onclick="return confirm('确定删除该批次？')"
-                               href="batch_list.php?delete=<?= $row['batch_id'] ?>">
-                               删除
-                            </a>
+                                <a class="btn btn-danger btn-sm"
+                                   onclick="return confirm('确定删除该批次？')"
+                                   href="batch_list.php?delete=<?= $row['batch_id'] ?>">
+                                   删除
+                                </a>
+                            <?php else: ?>
+                                <span class="text-muted">无权限</span>
+                            <?php endif; ?>
                         </td>
                     </tr>
 

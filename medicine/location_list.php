@@ -1,6 +1,8 @@
 <?php
 require_once "auth/check.php";
 require_once "config/db.php"; //数据库连接
+require_once "config/permissions.php";
+require_permission("location.view");
 ?>
 <?php
 /* --------------------------
@@ -9,6 +11,7 @@ require_once "config/db.php"; //数据库连接
 $message = "";
 
 if (isset($_GET["delete"])) {
+    require_permission("location.manage");
     $location_id = intval($_GET["delete"]);
 
     // 检查是否被库存记录使用
@@ -65,7 +68,9 @@ $result = $conn->query("SELECT * FROM locations ORDER BY location_id DESC");
 
                 <?= $message ?>
 
-                <a href="add_location.php" class="btn btn-primary mb-3">➕ 添加位置</a>
+                <?php if (user_can("location.manage")): ?>
+                    <a href="add_location.php" class="btn btn-primary mb-3">➕ 添加位置</a>
+                <?php endif; ?>
 
                 <table class="table table-bordered table-striped align-middle">
                     <thead class="table-dark">
@@ -84,15 +89,19 @@ $result = $conn->query("SELECT * FROM locations ORDER BY location_id DESC");
                                 <td><?= htmlspecialchars($row["name"]) ?></td>
                                 <td><?= htmlspecialchars($row["description"]) ?></td>
                                 <td>
-                                    <a class="btn btn-warning btn-sm"
-                                        href="edit_location.php?id=<?= $row['location_id'] ?>">
-                                        编辑
-                                    </a>
-                                    <a class="btn btn-danger btn-sm"
-                                        onclick="return confirm('确定删除该位置？')"
-                                        href="location_list.php?delete=<?= $row['location_id'] ?>">
-                                        删除
-                                    </a>
+                                    <?php if (user_can("location.manage")): ?>
+                                        <a class="btn btn-warning btn-sm"
+                                            href="edit_location.php?id=<?= $row['location_id'] ?>">
+                                            编辑
+                                        </a>
+                                        <a class="btn btn-danger btn-sm"
+                                            onclick="return confirm('确定删除该位置？')"
+                                            href="location_list.php?delete=<?= $row['location_id'] ?>">
+                                            删除
+                                        </a>
+                                    <?php else: ?>
+                                        <span class="text-muted">无权限</span>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endwhile; ?>

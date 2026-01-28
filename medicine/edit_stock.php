@@ -1,6 +1,8 @@
 <?php
 require_once "auth/check.php";
 require_once "config/db.php"; //数据库连接
+require_once "config/permissions.php";
+require_permission("stock.manage");
 ?>
 <?php
 /* --------------------------

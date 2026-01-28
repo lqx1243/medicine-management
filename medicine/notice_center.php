@@ -1,12 +1,15 @@
 <?php
 require_once "auth/check.php";
 require_once "config/db.php"; //数据库连接
+require_once "config/permissions.php";
+require_permission("notice.view");
 ?>
 <?php
 $delete_message = "";
 
 // 删除批次
 if (isset($_GET['delete'])) {
+    require_permission("batch.manage");
     $delete_id = intval($_GET['delete']);
 
     // 1. 取出数量和位置（用于扣减库存）
@@ -166,14 +169,17 @@ $low_result = $conn->query($low_sql);
                                     <td><?= $row['location_name'] ? htmlspecialchars($row['location_name']) : '<span class="text-muted">未设置</span>' ?></td>
                                     <td><?= $row['quantity'] ?></td>
                                     <td>
-                                        <a href="edit_batch.php?id=<?= $row['batch_id'] ?>" class="btn btn-warning btn-sm">编辑</a>
+                                        <?php if (user_can("batch.manage")): ?>
+                                            <a href="edit_batch.php?id=<?= $row['batch_id'] ?>" class="btn btn-warning btn-sm">编辑</a>
 
-                                        <a class="btn btn-danger btn-sm"
-                                            onclick="return confirm('确认删除该批次吗？')"
-                                            href="notice_center.php?delete=<?= $row['batch_id'] ?>">
-                                            删除
-                                        </a>
-
+                                            <a class="btn btn-danger btn-sm"
+                                                onclick="return confirm('确认删除该批次吗？')"
+                                                href="notice_center.php?delete=<?= $row['batch_id'] ?>">
+                                                删除
+                                            </a>
+                                        <?php else: ?>
+                                            <span class="text-muted">无权限</span>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
 
@@ -223,7 +229,11 @@ $low_result = $conn->query($low_sql);
                                     <td><?= $row['min_quantity'] ?></td>
                                     <td><?= htmlspecialchars($row['unit']) ?></td>
                                     <td>
-                                        <a href="edit_stock.php?id=<?= $row['stock_id'] ?>" class="btn btn-warning btn-sm">编辑</a>
+                                        <?php if (user_can("stock.manage")): ?>
+                                            <a href="edit_stock.php?id=<?= $row['stock_id'] ?>" class="btn btn-warning btn-sm">编辑</a>
+                                        <?php else: ?>
+                                            <span class="text-muted">无权限</span>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

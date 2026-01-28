@@ -1,6 +1,7 @@
 <?php
 require_once "auth/check.php";
 require_once "config/db.php"; //数据库连接
+require_once "config/permissions.php";
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -56,89 +57,107 @@ require_once "config/db.php"; //数据库连接
             <div class="row g-4">
 
                 <!-- 库存管理 -->
-                <div class="col-md-3">
-                    <a href="stock_list.php" class="text-decoration-none text-dark">
-                        <div class="card menu-card p-3 shadow-sm">
-                            <div class="menu-icon text-primary text-center">📦</div>
-                            <h5 class="text-center mt-3">库存列表</h5>
-                        </div>
-                    </a>
-                </div>
+                <?php if (user_can("stock.view")): ?>
+                    <div class="col-md-3">
+                        <a href="stock_list.php" class="text-decoration-none text-dark">
+                            <div class="card menu-card p-3 shadow-sm">
+                                <div class="menu-icon text-primary text-center">📦</div>
+                                <h5 class="text-center mt-3">库存列表</h5>
+                            </div>
+                        </a>
+                    </div>
+                <?php endif; ?>
 
-                <div class="col-md-3">
-                    <a href="add_stock.php" class="text-decoration-none text-dark">
-                        <div class="card menu-card p-3 shadow-sm">
-                            <div class="menu-icon text-success text-center">➕</div>
-                            <h5 class="text-center mt-3">添加库存</h5>
-                        </div>
-                    </a>
-                </div>
+                <?php if (user_can("stock.manage")): ?>
+                    <div class="col-md-3">
+                        <a href="add_stock.php" class="text-decoration-none text-dark">
+                            <div class="card menu-card p-3 shadow-sm">
+                                <div class="menu-icon text-success text-center">➕</div>
+                                <h5 class="text-center mt-3">添加库存</h5>
+                            </div>
+                        </a>
+                    </div>
+                <?php endif; ?>
 
                 <!-- 批次管理 -->
-                <div class="col-md-3">
-                    <a href="batch_list.php" class="text-decoration-none text-dark">
-                        <div class="card menu-card p-3 shadow-sm">
-                            <div class="menu-icon text-warning text-center">📋</div>
-                            <h5 class="text-center mt-3">批次列表</h5>
-                        </div>
-                    </a>
-                </div>
+                <?php if (user_can("batch.view")): ?>
+                    <div class="col-md-3">
+                        <a href="batch_list.php" class="text-decoration-none text-dark">
+                            <div class="card menu-card p-3 shadow-sm">
+                                <div class="menu-icon text-warning text-center">📋</div>
+                                <h5 class="text-center mt-3">批次列表</h5>
+                            </div>
+                        </a>
+                    </div>
+                <?php endif; ?>
 
-                <div class="col-md-3">
-                    <a href="add_batch.php" class="text-decoration-none text-dark">
-                        <div class="card menu-card p-3 shadow-sm">
-                            <div class="menu-icon text-success text-center">➕</div>
-                            <h5 class="text-center mt-3">添加批次</h5>
-                        </div>
-                    </a>
-                </div>
+                <?php if (user_can("batch.manage")): ?>
+                    <div class="col-md-3">
+                        <a href="add_batch.php" class="text-decoration-none text-dark">
+                            <div class="card menu-card p-3 shadow-sm">
+                                <div class="menu-icon text-success text-center">➕</div>
+                                <h5 class="text-center mt-3">添加批次</h5>
+                            </div>
+                        </a>
+                    </div>
+                <?php endif; ?>
 
                 <!-- 药品管理 -->
-                <div class="col-md-3">
-                    <a href="drugs_list.php" class="text-decoration-none text-dark">
-                        <div class="card menu-card p-3 shadow-sm mt-3">
-                            <div class="menu-icon text-info text-center">💊</div>
-                            <h5 class="text-center mt-3">药品列表</h5>
-                        </div>
-                    </a>
-                </div>
+                <?php if (user_can("drug.view")): ?>
+                    <div class="col-md-3">
+                        <a href="drugs_list.php" class="text-decoration-none text-dark">
+                            <div class="card menu-card p-3 shadow-sm mt-3">
+                                <div class="menu-icon text-info text-center">💊</div>
+                                <h5 class="text-center mt-3">药品列表</h5>
+                            </div>
+                        </a>
+                    </div>
+                <?php endif; ?>
 
-                <div class="col-md-3">
-                    <a href="add_drug.php" class="text-decoration-none text-dark">
-                        <div class="card menu-card p-3 shadow-sm mt-3">
-                            <div class="menu-icon text-success text-center">➕</div>
-                            <h5 class="text-center mt-3">添加药品</h5>
-                        </div>
-                    </a>
-                </div>
+                <?php if (user_can("drug.manage")): ?>
+                    <div class="col-md-3">
+                        <a href="add_drug.php" class="text-decoration-none text-dark">
+                            <div class="card menu-card p-3 shadow-sm mt-3">
+                                <div class="menu-icon text-success text-center">➕</div>
+                                <h5 class="text-center mt-3">添加药品</h5>
+                            </div>
+                        </a>
+                    </div>
+                <?php endif; ?>
 
                 <!-- 存放位置管理 -->
-                <div class="col-md-3">
-                    <a href="location_list.php" class="text-decoration-none text-dark">
-                        <div class="card menu-card p-3 shadow-sm mt-3">
-                            <div class="menu-icon text-secondary text-center">📍</div>
-                            <h5 class="text-center mt-3">位置列表</h5>
-                        </div>
-                    </a>
-                </div>
+                <?php if (user_can("location.view")): ?>
+                    <div class="col-md-3">
+                        <a href="location_list.php" class="text-decoration-none text-dark">
+                            <div class="card menu-card p-3 shadow-sm mt-3">
+                                <div class="menu-icon text-secondary text-center">📍</div>
+                                <h5 class="text-center mt-3">位置列表</h5>
+                            </div>
+                        </a>
+                    </div>
+                <?php endif; ?>
 
-                <div class="col-md-3">
-                    <a href="add_location.php" class="text-decoration-none text-dark">
-                        <div class="card menu-card p-3 shadow-sm mt-3">
-                            <div class="menu-icon text-success text-center">➕</div>
-                            <h5 class="text-center mt-3">添加位置</h5>
-                        </div>
-                    </a>
-                </div>
+                <?php if (user_can("location.manage")): ?>
+                    <div class="col-md-3">
+                        <a href="add_location.php" class="text-decoration-none text-dark">
+                            <div class="card menu-card p-3 shadow-sm mt-3">
+                                <div class="menu-icon text-success text-center">➕</div>
+                                <h5 class="text-center mt-3">添加位置</h5>
+                            </div>
+                        </a>
+                    </div>
+                <?php endif; ?>
 
-                <div class="col-md-3">
-                    <a href="notice_center.php" class="text-decoration-none text-dark">
-                        <div class="card menu-card p-3 shadow-sm">
-                            <div class="menu-icon text-danger text-center">⚠️</div>
-                            <h5 class="text-center mt-3">药品提醒中心</h5>
-                        </div>
-                    </a>
-                </div>
+                <?php if (user_can("notice.view")): ?>
+                    <div class="col-md-3">
+                        <a href="notice_center.php" class="text-decoration-none text-dark">
+                            <div class="card menu-card p-3 shadow-sm">
+                                <div class="menu-icon text-danger text-center">⚠️</div>
+                                <h5 class="text-center mt-3">药品提醒中心</h5>
+                            </div>
+                        </a>
+                    </div>
+                <?php endif; ?>
 
             </div>
 

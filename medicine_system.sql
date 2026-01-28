@@ -106,6 +106,7 @@ CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password_hash` varchar(255) NOT NULL,
+  `role` varchar(20) NOT NULL DEFAULT 'viewer' COMMENT '权限角色：admin 或 viewer',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -113,8 +114,8 @@ CREATE TABLE `users` (
 -- 转存表中的数据 `users`
 --
 
-INSERT INTO `users` (`user_id`, `username`, `password_hash`, `created_at`) VALUES
-(1, 'admin', '$2y$10$yMVbCEeLZHyo2W1jcFdC7OSFh9iQ/SRTFDWtWK0V0GQBKMlHPel5W', '2025-12-02 01:04:21');
+INSERT INTO `users` (`user_id`, `username`, `password_hash`, `role`, `created_at`) VALUES
+(1, 'admin', '$2y$10$yMVbCEeLZHyo2W1jcFdC7OSFh9iQ/SRTFDWtWK0V0GQBKMlHPel5W', 'admin', '2025-12-02 01:04:21');
 
 --
 -- 转储表的索引
