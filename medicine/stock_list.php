@@ -1,6 +1,8 @@
 <?php
 require_once "auth/check.php";
 require_once "config/db.php"; //数据库连接
+require_once "config/permissions.php";
+require_permission("stock.view");
 ?>
 <?php
 /* --------------------------
@@ -9,6 +11,7 @@ require_once "config/db.php"; //数据库连接
 $recalc_message = "";
 
 if (isset($_GET['recalc'])) {
+    require_permission("stock.manage");
 
     // 1. 获取所有药品所有存放位置
     $stockItems = $conn->query("
@@ -49,6 +52,7 @@ if (isset($_GET['recalc'])) {
 $delete_message = "";
 
 if (isset($_GET['delete'])) {
+    require_permission("stock.manage");
     $delete_id = intval($_GET['delete']);
 
     $conn->query("DELETE FROM stock WHERE stock_id = $delete_id");
@@ -104,10 +108,12 @@ $result = $conn->query($sql);
             <?php echo $recalc_message; ?>
 
 
-            <a href="add_stock.php" class="btn btn-primary mb-3">➕ 添加库存</a>
-            <a href="stock_list.php?recalc=1" class="btn btn-secondary mb-3">
-                🔄 重新计算库存
-            </a>
+            <?php if (user_can("stock.manage")): ?>
+                <a href="add_stock.php" class="btn btn-primary mb-3">➕ 添加库存</a>
+                <a href="stock_list.php?recalc=1" class="btn btn-secondary mb-3">
+                    🔄 重新计算库存
+                </a>
+            <?php endif; ?>
             <table class="table table-bordered table-striped align-middle sortable">
                 <thead class="table-dark">
                     <tr>
@@ -156,16 +162,20 @@ $result = $conn->query($sql);
                         <td><?php echo $row['updated_at']; ?></td>
 
                         <td>
-                            <a class="btn btn-warning btn-sm"
-                                href="edit_stock.php?id=<?php echo $row['stock_id']; ?>">
-                                编辑
-                            </a>
+                            <?php if (user_can("stock.manage")): ?>
+                                <a class="btn btn-warning btn-sm"
+                                    href="edit_stock.php?id=<?php echo $row['stock_id']; ?>">
+                                    编辑
+                                </a>
 
-                            <a class="btn btn-danger btn-sm"
-                                onclick="return confirm('确认删除该库存记录？');"
-                                href="stock_list.php?delete=<?php echo $row['stock_id']; ?>">
-                                删除
-                            </a>
+                                <a class="btn btn-danger btn-sm"
+                                    onclick="return confirm('确认删除该库存记录？');"
+                                    href="stock_list.php?delete=<?php echo $row['stock_id']; ?>">
+                                    删除
+                                </a>
+                            <?php else: ?>
+                                <span class="text-muted">无权限</span>
+                            <?php endif; ?>
                         </td>
 
                     </tr>

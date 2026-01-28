@@ -14,17 +14,18 @@ if (isset($_COOKIE["remember_token"])) {
     list($username, $hash) = explode(":", $token);
 
     // 从数据库获取用户
-    $stmt = $conn->prepare("SELECT password_hash FROM users WHERE username=?");
+    $stmt = $conn->prepare("SELECT password_hash, role FROM users WHERE username=?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $stmt->store_result();
-    $stmt->bind_result($password_hash);
+    $stmt->bind_result($password_hash, $role);
 
     if ($stmt->num_rows > 0 && $stmt->fetch()) {
 
         if (hash_equals($hash, hash_hmac("sha256", $username, "your_secret_key"))) {
             // cookie有效 → 自动登录
             $_SESSION["user"] = $username;
+            $_SESSION["role"] = $role ?: "viewer";
             header("Location: ../dashboard.php");
             exit();
         }
@@ -39,17 +40,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = $_POST["password"];
     $remember = isset($_POST["remember"]);
 
-    $stmt = $conn->prepare("SELECT password_hash FROM users WHERE username=?");
+    $stmt = $conn->prepare("SELECT password_hash, role FROM users WHERE username=?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $stmt->store_result();
-    $stmt->bind_result($password_hash);
+    $stmt->bind_result($password_hash, $role);
 
     if ($stmt->num_rows === 1 && $stmt->fetch()) {
 
         if (password_verify($password, $password_hash)) {
 
             $_SESSION["user"] = $username;
+            $_SESSION["role"] = $role ?: "viewer";
 
             // “保持登录” Cookie
             if ($remember) {

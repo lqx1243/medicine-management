@@ -52,8 +52,11 @@ Windows + XAMPP
 2. Create the database table in MYSQL required by `medicine_system.sql`  
    The database initially contained only one user's data; the other tables were empty.  
 3. Visit `http://localhost/medicine/auth/login.php`  
-   The default username is `admin`  
-   The default password is `123456`  
+   The default admin username is `Admin`  
+   The default admin password is `123456` 
+
+   The default viewer username is `Viewer`  
+   The default viewer password is `123456`  
 4. Configure database connection information at `/XAMPP/htdocs/medicine/config/db.php`  
    The default HOST is `localhost`  
    The default USER is `root`  

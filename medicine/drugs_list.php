@@ -1,6 +1,8 @@
 <?php
 require_once "auth/check.php";
 require_once "config/db.php"; //数据库连接
+require_once "config/permissions.php";
+require_permission("drug.view");
 ?>
 <?php
 /* --------------------------
@@ -9,6 +11,7 @@ require_once "config/db.php"; //数据库连接
 $delete_message = "";
 
 if (isset($_GET['delete'])) {
+    require_permission("drug.manage");
     $delete_id = intval($_GET['delete']);
 
     // 删除药品（会触发外键级联删除 stock、batches）
@@ -48,7 +51,9 @@ $result = $conn->query($sql);
             <!-- 显示删除提示 -->
             <?php echo $delete_message; ?>
 
-            <a href="add_drug.php" class="btn btn-primary mb-3">➕ 添加药品</a>
+            <?php if (user_can("drug.manage")): ?>
+                <a href="add_drug.php" class="btn btn-primary mb-3">➕ 添加药品</a>
+            <?php endif; ?>
 
             <table class="table table-striped table-bordered align-middle">
                 <thead class="table-dark">
@@ -79,15 +84,19 @@ $result = $conn->query($sql);
                         <td><?php echo $row['created_at']; ?></td>
 
                         <td>
-                            <a class="btn btn-warning btn-sm" href="edit_drug.php?id=<?php echo $row['drug_id']; ?>">
-                                编辑
-                            </a>
+                            <?php if (user_can("drug.manage")): ?>
+                                <a class="btn btn-warning btn-sm" href="edit_drug.php?id=<?php echo $row['drug_id']; ?>">
+                                    编辑
+                                </a>
 
-                            <a class="btn btn-danger btn-sm"
-                                onclick="return confirm('确认删除该药品吗？')"
-                                href="drugs_list.php?delete=<?php echo $row['drug_id']; ?>">
-                                删除
-                            </a>
+                                <a class="btn btn-danger btn-sm"
+                                    onclick="return confirm('确认删除该药品吗？')"
+                                    href="drugs_list.php?delete=<?php echo $row['drug_id']; ?>">
+                                    删除
+                                </a>
+                            <?php else: ?>
+                                <span class="text-muted">无权限</span>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php
