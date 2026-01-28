@@ -1,6 +1,8 @@
 <?php
 require_once "auth/check.php";
 require_once "config/db.php"; //数据库连接
+require_once "config/permissions.php";
+require_permission("stock.manage");
 ?>
 <?php
 /* --------------------------
@@ -29,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Location: add_stock.php?success=1");
         exit();
     } else {
-        $message = "<div class='alert alert-danger'>添加失败：" . $stmt->error . "</div>";
+        $message = "<div class='alert alert-danger'>" . sprintf(t("add_failed"), $stmt->error) . "</div>";
     }
 
     $stmt->close();
@@ -51,7 +53,7 @@ $location_list = $conn->query("SELECT location_id, name FROM locations ORDER BY 
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <title>添加库存</title>
+    <title><?= t("add_stock_title") ?></title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -62,8 +64,13 @@ $location_list = $conn->query("SELECT location_id, name FROM locations ORDER BY 
 <div class="container mt-5">
 
     <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h3>添加库存</h3>
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3><?= t("add_stock_title") ?></h3>
+            <div>
+                <a class="text-white text-decoration-none" href="<?= language_switch_url("zh") ?>"><?= t("language_zh") ?></a>
+                <span class="text-white-50 mx-1">|</span>
+                <a class="text-white text-decoration-none" href="<?= language_switch_url("en") ?>"><?= t("language_en") ?></a>
+            </div>
         </div>
 
         <div class="card-body">
@@ -71,7 +78,7 @@ $location_list = $conn->query("SELECT location_id, name FROM locations ORDER BY 
             <!-- 成功提示 -->
             <?php
             if (isset($_GET['success'])) {
-                echo "<div class='alert alert-success'>库存添加成功！</div>";
+                echo "<div class='alert alert-success'>" . t("stock_add_success") . "</div>";
             }
             ?>
 
@@ -81,9 +88,9 @@ $location_list = $conn->query("SELECT location_id, name FROM locations ORDER BY 
 
                 <!-- 药品选择 -->
                 <div class="mb-3">
-                    <label class="form-label">药品 *</label>
+                    <label class="form-label"><?= t("drug_label") ?></label>
                     <select class="form-select" name="drug_id" required>
-                        <option value="">请选择药品</option>
+                        <option value=""><?= t("select_drug") ?></option>
                         <?php
                         if ($drug_list->num_rows > 0) {
                             while ($row = $drug_list->fetch_assoc()) {
@@ -96,9 +103,9 @@ $location_list = $conn->query("SELECT location_id, name FROM locations ORDER BY 
 
                 <!-- 存放位置 -->
                 <div class="mb-3">
-                    <label class="form-label">存放位置 *</label>
+                    <label class="form-label"><?= t("location_label") ?></label>
                     <select class="form-select" name="location_id" required>
-                        <option value="">请选择位置</option>
+                        <option value=""><?= t("select_location") ?></option>
                         <?php
                         if ($location_list->num_rows > 0) {
                             while ($row = $location_list->fetch_assoc()) {
@@ -111,24 +118,24 @@ $location_list = $conn->query("SELECT location_id, name FROM locations ORDER BY 
 
                 <!-- 数量 -->
                 <div class="mb-3">
-                    <label class="form-label">数量 *</label>
+                    <label class="form-label"><?= t("quantity_label") ?></label>
                     <input type="number" class="form-control" name="quantity" required>
                 </div>
 
                 <!-- 单位 -->
                 <div class="mb-3">
-                    <label class="form-label">单位（如：盒 / 瓶 / 支）</label>
+                    <label class="form-label"><?= t("unit_label") ?></label>
                     <input type="text" class="form-control" name="unit">
                 </div>
 
                 <!-- 库存下限提醒 -->
                 <div class="mb-3">
-                    <label class="form-label">库存下限（低于此数量时提醒）</label>
+                    <label class="form-label"><?= t("min_quantity_hint") ?></label>
                     <input type="number" class="form-control" name="min_quantity" value="0">
                 </div>
 
-                <button type="submit" class="btn btn-success">提交</button>
-                <a href="dashboard.php" class="btn btn-secondary">返回</a>
+                <button type="submit" class="btn btn-success"><?= t("submit") ?></button>
+                <a href="dashboard.php" class="btn btn-secondary"><?= t("return") ?></a>
 
             </form>
         </div>

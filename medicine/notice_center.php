@@ -1,12 +1,15 @@
 <?php
 require_once "auth/check.php";
 require_once "config/db.php"; //数据库连接
+require_once "config/permissions.php";
+require_permission("notice.view");
 ?>
 <?php
 $delete_message = "";
 
 // 删除批次
 if (isset($_GET['delete'])) {
+    require_permission("batch.manage");
     $delete_id = intval($_GET['delete']);
 
     // 1. 取出数量和位置（用于扣减库存）
@@ -31,7 +34,7 @@ if (isset($_GET['delete'])) {
             ");
         }
 
-        $delete_message = "<div class='alert alert-success'>批次已删除。</div>";
+        $delete_message = "<div class='alert alert-success'>" . t("batch_deleted_notice") . "</div>";
     }
 }
 
@@ -85,7 +88,7 @@ $low_result = $conn->query($low_sql);
 
 <head>
     <meta charset="UTF-8">
-    <title>需要注意的药品提醒</title>
+    <title><?= t("notice_title") ?></title>
 
     <!-- Bootstrap -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -113,14 +116,20 @@ $low_result = $conn->query($low_sql);
 
     <div class="container mt-5">
 
-        <h1 class="fw-bold mb-4 text-center">⚠️ 药品提醒中心</h1>
+        <h1 class="fw-bold mb-4 text-center">⚠️ <?= t("notice_center") ?></h1>
+
+        <div class="text-end mb-3">
+            <a class="text-decoration-none" href="<?= language_switch_url("zh") ?>"><?= t("language_zh") ?></a>
+            <span class="text-muted mx-1">|</span>
+            <a class="text-decoration-none" href="<?= language_switch_url("en") ?>"><?= t("language_en") ?></a>
+        </div>
 
         <!-- ============================= -->
         <!-- 一：临期批次 -->
         <!-- ============================= -->
         <div class="card mb-5 shadow section-card">
             <div class="card-header bg-warning">
-                <h3 class="m-0">📋 临期 / 过期 批次</h3>
+                <h3 class="m-0">📋 <?= t("notice_batch_title") ?></h3>
             </div>
 
             <div class="card-body">
@@ -128,20 +137,20 @@ $low_result = $conn->query($low_sql);
 
 
                 <?php if ($exp_result->num_rows == 0): ?>
-                    <p class="text-success">目前没有临期或过期批次。</p>
+                    <p class="text-success"><?= t("notice_no_batch") ?></p>
                 <?php else: ?>
 
                     <table class="table table-bordered table-striped align-middle">
                         <thead class="table-dark">
                             <tr>
                                 <th>ID</th>
-                                <th>药品名称</th>
-                                <th>批号</th>
-                                <th>有效期</th>
-                                <th>剩余天数</th>
-                                <th>存放位置</th>
-                                <th>数量</th>
-                                <th>操作</th>
+                                <th><?= t("drug_name") ?></th>
+                                <th><?= t("batch_number") ?></th>
+                                <th><?= t("expire_date") ?></th>
+                                <th><?= t("days_left") ?></th>
+                                <th><?= t("location_name") ?></th>
+                                <th><?= t("quantity") ?></th>
+                                <th><?= t("actions") ?></th>
                             </tr>
                         </thead>
 
@@ -151,10 +160,10 @@ $low_result = $conn->query($low_sql);
 
                                 if ($days < 0) {
                                     $row_class = "expired";
-                                    $status = "已过期";
+                                    $status = t("expired");
                                 } elseif ($days <= 30) {
                                     $row_class = "warning";
-                                    $status = "仅剩 $days 天";
+                                    $status = sprintf(t("only_left"), $days);
                                 }
                             ?>
                                 <tr class="<?= $row_class ?>">
@@ -163,17 +172,20 @@ $low_result = $conn->query($low_sql);
                                     <td><?= htmlspecialchars($row['batch_number']) ?></td>
                                     <td><?= $row['expire_date'] ?></td>
                                     <td><?= $status ?></td>
-                                    <td><?= $row['location_name'] ? htmlspecialchars($row['location_name']) : '<span class="text-muted">未设置</span>' ?></td>
+                                    <td><?= $row['location_name'] ? htmlspecialchars($row['location_name']) : '<span class="text-muted">' . t("not_set") . '</span>' ?></td>
                                     <td><?= $row['quantity'] ?></td>
                                     <td>
-                                        <a href="edit_batch.php?id=<?= $row['batch_id'] ?>" class="btn btn-warning btn-sm">编辑</a>
+                                        <?php if (user_can("batch.manage")): ?>
+                                            <a href="edit_batch.php?id=<?= $row['batch_id'] ?>" class="btn btn-warning btn-sm"><?= t("edit") ?></a>
 
-                                        <a class="btn btn-danger btn-sm"
-                                            onclick="return confirm('确认删除该批次吗？')"
-                                            href="notice_center.php?delete=<?= $row['batch_id'] ?>">
-                                            删除
-                                        </a>
-
+                                            <a class="btn btn-danger btn-sm"
+                                                onclick="return confirm('<?= t("confirm_delete_batch") ?>')"
+                                                href="notice_center.php?delete=<?= $row['batch_id'] ?>">
+                                                <?= t("delete") ?>
+                                            </a>
+                                        <?php else: ?>
+                                            <span class="text-muted"><?= t("no_permission") ?></span>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
 
@@ -192,24 +204,24 @@ $low_result = $conn->query($low_sql);
         <!-- ============================= -->
         <div class="card shadow section-card">
             <div class="card-header bg-danger text-white">
-                <h3 class="m-0">📦 库存不足药品</h3>
+                <h3 class="m-0">📦 <?= t("notice_stock_title") ?></h3>
             </div>
 
             <div class="card-body">
                 <?php if ($low_result->num_rows == 0): ?>
-                    <p class="text-success">目前没有库存不足的药品。</p>
+                    <p class="text-success"><?= t("notice_no_stock") ?></p>
                 <?php else: ?>
 
                     <table class="table table-bordered table-striped align-middle">
                         <thead class="table-dark">
                             <tr>
                                 <th>ID</th>
-                                <th>药品名称</th>
-                                <th>存放位置</th>
-                                <th>当前库存</th>
-                                <th>下限</th>
-                                <th>单位</th>
-                                <th>操作</th>
+                                <th><?= t("drug_name") ?></th>
+                                <th><?= t("location_name") ?></th>
+                                <th><?= t("current_stock") ?></th>
+                                <th><?= t("min_quantity") ?></th>
+                                <th><?= t("unit") ?></th>
+                                <th><?= t("actions") ?></th>
                             </tr>
                         </thead>
 
@@ -218,12 +230,16 @@ $low_result = $conn->query($low_sql);
                                 <tr class="expired">
                                     <td><?= $row['stock_id'] ?></td>
                                     <td><?= htmlspecialchars($row['drug_name']) ?></td>
-                                    <td><?= htmlspecialchars($row['location_name']) ?></td>
+                                    <td><?= $row['location_name'] ? htmlspecialchars($row['location_name']) : '<span class="text-muted">' . t("not_set") . '</span>' ?></td>
                                     <td><?= $row['quantity'] ?></td>
                                     <td><?= $row['min_quantity'] ?></td>
                                     <td><?= htmlspecialchars($row['unit']) ?></td>
                                     <td>
-                                        <a href="edit_stock.php?id=<?= $row['stock_id'] ?>" class="btn btn-warning btn-sm">编辑</a>
+                                        <?php if (user_can("stock.manage")): ?>
+                                            <a href="edit_stock.php?id=<?= $row['stock_id'] ?>" class="btn btn-warning btn-sm"><?= t("edit") ?></a>
+                                        <?php else: ?>
+                                            <span class="text-muted"><?= t("no_permission") ?></span>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
@@ -235,7 +251,7 @@ $low_result = $conn->query($low_sql);
 
             </div>
         </div>
-        <a href="dashboard.php" class="btn btn-secondary">返回</a>
+        <a href="dashboard.php" class="btn btn-secondary"><?= t("return") ?></a>
     </div>
 
 </body>

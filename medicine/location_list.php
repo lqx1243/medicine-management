@@ -1,6 +1,8 @@
 <?php
 require_once "auth/check.php";
 require_once "config/db.php"; //数据库连接
+require_once "config/permissions.php";
+require_permission("location.view");
 ?>
 <?php
 /* --------------------------
@@ -9,6 +11,7 @@ require_once "config/db.php"; //数据库连接
 $message = "";
 
 if (isset($_GET["delete"])) {
+    require_permission("location.manage");
     $location_id = intval($_GET["delete"]);
 
     // 检查是否被库存记录使用
@@ -22,10 +25,10 @@ if (isset($_GET["delete"])) {
     ");
 
     if ($check_stock->num_rows > 0 || $check_batch->num_rows > 0) {
-        $message = "<div class='alert alert-danger'>该位置正在被使用，无法删除。</div>";
+        $message = "<div class='alert alert-danger'>" . t("location_in_use") . "</div>";
     } else {
         $conn->query("DELETE FROM locations WHERE location_id = $location_id");
-        $message = "<div class='alert alert-success'>位置已删除。</div>";
+        $message = "<div class='alert alert-success'>" . t("location_deleted") . "</div>";
     }
 }
 
@@ -40,7 +43,7 @@ $result = $conn->query("SELECT * FROM locations ORDER BY location_id DESC");
 
 <head>
     <meta charset="UTF-8">
-    <title>存放位置列表</title>
+    <title><?= t("location_list_title") ?></title>
 
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -52,28 +55,39 @@ $result = $conn->query("SELECT * FROM locations ORDER BY location_id DESC");
         <div class="card shadow">
 
             <div class="card-header bg-secondary text-white">
-                <h3>存放位置列表</h3>
+                <h3><?= t("location_list_title") ?></h3>
             </div>
 
             <div class="card-body">
 
                 <?php
                 if (isset($_GET['updated'])) {
-                    $message = "<div class='alert alert-success'>位置已更新。</div>";
+                    $message = "<div class='alert alert-success'>" . t("location_updated") . "</div>";
                 }
                 ?>
 
                 <?= $message ?>
 
-                <a href="add_location.php" class="btn btn-primary mb-3">➕ 添加位置</a>
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                    <div>
+                        <?php if (user_can("location.manage")): ?>
+                            <a href="add_location.php" class="btn btn-primary">➕ <?= t("add_location") ?></a>
+                        <?php endif; ?>
+                    </div>
+                    <div>
+                        <a class="text-decoration-none" href="<?= language_switch_url("zh") ?>"><?= t("language_zh") ?></a>
+                        <span class="text-muted mx-1">|</span>
+                        <a class="text-decoration-none" href="<?= language_switch_url("en") ?>"><?= t("language_en") ?></a>
+                    </div>
+                </div>
 
                 <table class="table table-bordered table-striped align-middle">
                     <thead class="table-dark">
                         <tr>
                             <th>ID</th>
-                            <th>位置名称</th>
-                            <th>描述</th>
-                            <th style="width:150px;">操作</th>
+                            <th><?= t("location_name_label") ?></th>
+                            <th><?= t("description") ?></th>
+                            <th style="width:150px;"><?= t("actions") ?></th>
                         </tr>
                     </thead>
 
@@ -84,22 +98,26 @@ $result = $conn->query("SELECT * FROM locations ORDER BY location_id DESC");
                                 <td><?= htmlspecialchars($row["name"]) ?></td>
                                 <td><?= htmlspecialchars($row["description"]) ?></td>
                                 <td>
-                                    <a class="btn btn-warning btn-sm"
-                                        href="edit_location.php?id=<?= $row['location_id'] ?>">
-                                        编辑
-                                    </a>
-                                    <a class="btn btn-danger btn-sm"
-                                        onclick="return confirm('确定删除该位置？')"
-                                        href="location_list.php?delete=<?= $row['location_id'] ?>">
-                                        删除
-                                    </a>
+                                    <?php if (user_can("location.manage")): ?>
+                                        <a class="btn btn-warning btn-sm"
+                                            href="edit_location.php?id=<?= $row['location_id'] ?>">
+                                            <?= t("edit") ?>
+                                        </a>
+                                        <a class="btn btn-danger btn-sm"
+                                            onclick="return confirm('<?= t("confirm_delete_location") ?>')"
+                                            href="location_list.php?delete=<?= $row['location_id'] ?>">
+                                            <?= t("delete") ?>
+                                        </a>
+                                    <?php else: ?>
+                                        <span class="text-muted"><?= t("no_permission") ?></span>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endwhile; ?>
                     </tbody>
 
                 </table>
-                <a href="dashboard.php" class="btn btn-secondary">返回</a>
+                <a href="dashboard.php" class="btn btn-secondary"><?= t("return") ?></a>
             </div>
 
         </div>

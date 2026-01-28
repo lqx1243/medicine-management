@@ -1,13 +1,15 @@
 <?php
 require_once "auth/check.php";
 require_once "config/db.php"; //数据库连接
+require_once "config/permissions.php";
+require_permission("drug.manage");
 ?>
 <?php
 /* --------------------------
     获取 id 并检查是否存在
 --------------------------- */
 if (!isset($_GET['id'])) {
-    die("缺少药品 ID");
+    die(t("missing_drug_id"));
 }
 
 $drug_id = intval($_GET['id']);
@@ -49,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Location: drugs_list.php?updated=1");
         exit();
     } else {
-        $update_message = "<div class='alert alert-danger'>更新失败：" . $stmt->error . "</div>";
+        $update_message = "<div class='alert alert-danger'>" . sprintf(t("update_failed"), $stmt->error) . "</div>";
     }
 
     $stmt->close();
@@ -62,7 +64,7 @@ $sql = "SELECT * FROM drugs WHERE drug_id = $drug_id LIMIT 1";
 $result = $conn->query($sql);
 
 if ($result->num_rows === 0) {
-    die("找不到该药品");
+    die(t("drug_not_found"));
 }
 
 $drug = $result->fetch_assoc();
@@ -73,7 +75,7 @@ $drug = $result->fetch_assoc();
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <title>编辑药品</title>
+    <title><?= t("edit_drug_title") ?></title>
 
     <!-- Bootstrap 美化 -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -84,8 +86,13 @@ $drug = $result->fetch_assoc();
 <div class="container mt-5">
 
     <div class="card shadow">
-        <div class="card-header bg-warning">
-            <h3>编辑药品：<?php echo htmlspecialchars($drug["name"]); ?></h3>
+        <div class="card-header bg-warning d-flex justify-content-between align-items-center">
+            <h3><?= sprintf(t("edit_drug_heading"), htmlspecialchars($drug["name"])) ?></h3>
+            <div>
+                <a class="text-decoration-none text-dark" href="<?= language_switch_url("zh") ?>"><?= t("language_zh") ?></a>
+                <span class="text-muted mx-1">|</span>
+                <a class="text-decoration-none text-dark" href="<?= language_switch_url("en") ?>"><?= t("language_en") ?></a>
+            </div>
         </div>
 
         <div class="card-body">
@@ -95,32 +102,32 @@ $drug = $result->fetch_assoc();
             <form method="POST">
 
                 <div class="mb-3">
-                    <label class="form-label">药品名称 *</label>
+                    <label class="form-label"><?= t("drug_name_label") ?></label>
                     <input type="text" class="form-control" name="name" value="<?php echo htmlspecialchars($drug['name']); ?>" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">剂型</label>
+                    <label class="form-label"><?= t("drug_type") ?></label>
                     <input type="text" class="form-control" name="type" value="<?php echo htmlspecialchars($drug['type']); ?>">
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">规格</label>
+                    <label class="form-label"><?= t("drug_spec") ?></label>
                     <input type="text" class="form-control" name="spec" value="<?php echo htmlspecialchars($drug['spec']); ?>">
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">保存要求</label>
+                    <label class="form-label"><?= t("storage_requirement") ?></label>
                     <input type="text" class="form-control" name="storage_requirement" value="<?php echo htmlspecialchars($drug['storage_requirement']); ?>">
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">备注</label>
+                    <label class="form-label"><?= t("remark") ?></label>
                     <textarea class="form-control" name="remark" rows="3"><?php echo htmlspecialchars($drug['remark']); ?></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-success">保存修改</button>
-                <a href="drugs_list.php" class="btn btn-secondary">返回</a>
+                <button type="submit" class="btn btn-success"><?= t("save_changes") ?></button>
+                <a href="drugs_list.php" class="btn btn-secondary"><?= t("return") ?></a>
 
             </form>
 

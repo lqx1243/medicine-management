@@ -1,12 +1,14 @@
 <?php
 require_once "auth/check.php";
 require_once "config/db.php"; //数据库连接
+require_once "config/permissions.php";
+require_permission("stock.manage");
 ?>
 <?php
 /* --------------------------
     检查 ID
 --------------------------- */
-if (!isset($_GET["id"])) die("缺少库存 ID");
+if (!isset($_GET["id"])) die(t("missing_stock_id"));
 
 $stock_id = intval($_GET["id"]);
 
@@ -27,7 +29,7 @@ $sql = "
 
 $res = $conn->query($sql);
 
-if ($res->num_rows === 0) die("未找到库存记录。");
+if ($res->num_rows === 0) die(t("stock_not_found"));
 
 $stock = $res->fetch_assoc();
 
@@ -68,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Location: stock_list.php?updated=1");
         exit();
     } else {
-        $message = "<div class='alert alert-danger'>更新失败：" . $stmt->error . "</div>";
+        $message = "<div class='alert alert-danger'>" . sprintf(t("update_failed"), $stmt->error) . "</div>";
     }
 
     $stmt->close();
@@ -80,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <head>
     <meta charset="UTF-8">
-    <title>编辑库存</title>
+    <title><?= t("edit_stock_title") ?></title>
 
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -90,8 +92,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="container mt-5">
 
         <div class="card shadow">
-            <div class="card-header bg-info text-white">
-                <h3>编辑库存：<?= htmlspecialchars($stock["drug_name"]) ?></h3>
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h3><?= sprintf(t("edit_stock_heading"), htmlspecialchars($stock["drug_name"])) ?></h3>
+                <div>
+                    <a class="text-white text-decoration-none" href="<?= language_switch_url("zh") ?>"><?= t("language_zh") ?></a>
+                    <span class="text-white-50 mx-1">|</span>
+                    <a class="text-white text-decoration-none" href="<?= language_switch_url("en") ?>"><?= t("language_en") ?></a>
+                </div>
             </div>
 
             <div class="card-body">
@@ -102,37 +109,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                     <!-- 药品名称 -->
                     <div class="mb-3">
-                        <label class="form-label">药品名称</label>
+                        <label class="form-label"><?= t("drug_name") ?></label>
                         <input type="text" class="form-control"
                             value="<?= htmlspecialchars($stock["drug_name"]) ?>" disabled>
                     </div>
 
                     <!-- 数量（只读显示） -->
                     <div class="mb-3">
-                        <label class="form-label">当前数量</label>
+                        <label class="form-label"><?= t("current_quantity") ?></label>
                         <input type="number" class="form-control bg-light"
                             value="<?= $quantity ?>" readonly>
                     </div>
 
                     <!-- 下限 -->
                     <div class="mb-3">
-                        <label class="form-label">提醒下限 *</label>
+                        <label class="form-label"><?= t("min_quantity_label") ?></label>
                         <input type="number" class="form-control" name="min_quantity"
                             value="<?= $min_quantity ?>" required>
                     </div>
 
                     <!-- 单位 -->
                     <div class="mb-3">
-                        <label class="form-label">单位 *</label>
+                        <label class="form-label"><?= t("unit_required") ?></label>
                         <input type="text" class="form-control" name="unit"
-                            value="<?= htmlspecialchars($unit) ?>" placeholder="瓶/盒/支" required>
+                            value="<?= htmlspecialchars($unit) ?>" placeholder="<?= t("unit_label") ?>" required>
                     </div>
 
                     <!-- 位置 -->
                     <div class="mb-3">
-                        <label class="form-label">存放位置 *</label>
+                        <label class="form-label"><?= t("location_label") ?></label>
                         <select class="form-select" name="location_id" required>
-                            <option value="">请选择...</option>
+                            <option value=""><?= t("select_location_placeholder") ?></option>
                             <?php while ($loc = $locations->fetch_assoc()): ?>
                                 <option value="<?= $loc["location_id"] ?>"
                                     <?= ($loc["location_id"] == $location_id) ? "selected" : "" ?>>
@@ -142,8 +149,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-success">保存修改</button>
-                    <a href="stock_list.php" class="btn btn-secondary">返回</a>
+                    <button type="submit" class="btn btn-success"><?= t("save_changes") ?></button>
+                    <a href="stock_list.php" class="btn btn-secondary"><?= t("return") ?></a>
                 </form>
 
             </div>
