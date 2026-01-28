@@ -14,13 +14,15 @@ if (isset($_COOKIE["remember_token"])) {
     list($username, $hash) = explode(":", $token);
 
     // 从数据库获取用户
-    $stmt = $conn->prepare("SELECT password_hash, role FROM users WHERE username=?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $stmt->store_result();
-    $stmt->bind_result($password_hash, $role);
+    $sql = "SELECT password_hash, role FROM users WHERE username = '$username'";
+    $result = $conn->query($sql);
 
-    if ($stmt->num_rows > 0 && $stmt->fetch()) {
+    if ($row = $result->fetch_assoc()) {
+        $password_hash = $row['password_hash'];
+        $role = $row['role'];
+    }
+
+    if ($result->num_rows > 0) {
 
         if (hash_equals($hash, hash_hmac("sha256", $username, "your_secret_key"))) {
             // cookie有效 → 自动登录
@@ -40,13 +42,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = $_POST["password"];
     $remember = isset($_POST["remember"]);
 
-    $stmt = $conn->prepare("SELECT password_hash, role FROM users WHERE username=?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $stmt->store_result();
-    $stmt->bind_result($password_hash, $role);
+    $sql = "SELECT password_hash, role FROM users WHERE username = '$username'";
+    $result = $conn->query($sql);
 
-    if ($stmt->num_rows === 1 && $stmt->fetch()) {
+    if ($row = $result->fetch_assoc()) {
+        $password_hash = $row['password_hash'];
+        $role = $row['role'];
+    }
+
+    if ($result->num_rows === 1) {
 
         if (password_verify($password, $password_hash)) {
 

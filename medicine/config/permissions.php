@@ -32,18 +32,19 @@ function ensure_user_role($conn)
     }
 
     $username = $_SESSION["user"];
-    $stmt = $conn->prepare("SELECT role FROM users WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $stmt->bind_result($role);
+    $sql = "SELECT role FROM users WHERE username = '$username'";
+    $result = $conn->query($sql);
 
-    if ($stmt->fetch()) {
+    if ($row = $result->fetch_assoc()) {
+        $role = $row['role'];
+    }
+
+
+    if ($conn->fetch()) {
         $_SESSION["role"] = normalize_role($role);
     } else {
         $_SESSION["role"] = "viewer";
     }
-
-    $stmt->close();
 }
 
 function user_can($permission)

@@ -20,20 +20,18 @@ function write_log($conn, $action, $drug_id, $detail, $username = null)
     }
 
     if ($drug_id === null) {
-        $stmt = $conn->prepare("
-            INSERT INTO logs (action, detail, username)
-            VALUES (?, ?, ?)
-        ");
-        $stmt->bind_param("sss", $action, $detail, $username);
+        $sql = "
+        INSERT INTO logs (action, detail, username)
+        VALUES ('$action', '$detail', '$username')
+    ";
     } else {
-        $stmt = $conn->prepare("
-            INSERT INTO logs (action, drug_id, detail, username)
-            VALUES (?, ?, ?, ?)
-        ");
-        $stmt->bind_param("siss", $action, $drug_id, $detail, $username);
+        $sql = "
+        INSERT INTO logs (action, drug_id, detail, username)
+        VALUES ('$action', $drug_id, '$detail', '$username')
+    ";
     }
 
-    $stmt->execute();
-    $stmt->close();
+    $conn->query($sql);
+
 }
 ?>

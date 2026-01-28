@@ -17,13 +17,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($name != "") {
 
-        $stmt = $conn->prepare("
+        $sql = "
             INSERT INTO locations (name, description)
-            VALUES (?, ?)
-        ");
-        $stmt->bind_param("ss", $name, $description);
-
-        if ($stmt->execute()) {
+            VALUES ('$name', '$description')
+        ";
+        if ($conn->query($sql)) {
             $detail = "新增存放位置：名称={$name}";
             if ($description !== "") {
                 $detail .= "，描述={$description}";
@@ -32,10 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header("Location: location_list.php?added=1");
             exit();
         } else {
-            $message = "<div class='alert alert-danger'>添加失败：" . $stmt->error . "</div>";
+            $message = "<div class='alert alert-danger'>添加失败：" . $conn->error . "</div>";
         }
 
-        $stmt->close();
     } else {
         $message = "<div class='alert alert-danger'>位置名称不能为空。</div>";
     }

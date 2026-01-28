@@ -27,15 +27,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $old = $conn->query("SELECT name, description FROM locations WHERE location_id = $location_id LIMIT 1");
     $old_location = $old ? $old->fetch_assoc() : null;
 
-    $stmt = $conn->prepare("
-        UPDATE locations
-        SET name=?, description=?
-        WHERE location_id=?
-    ");
+    $sql = "
+    UPDATE locations
+    SET name = '$name',
+        description = '$description'
+    WHERE location_id = $location_id
+";
 
-    $stmt->bind_param("ssi", $name, $description, $location_id);
-
-    if ($stmt->execute()) {
+    if ($conn->query($sql)) {
         $old_name = $old_location['name'] ?? '';
         $old_description = $old_location['description'] ?? '';
         $detail = "更新存放位置：位置ID={$location_id}，名称={$old_name}→{$name}，描述={$old_description}→{$description}";
@@ -44,10 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Location: location_list.php?updated=1");
         exit();
     } else {
-        $update_message = "<div class='alert alert-danger'>更新失败：" . $stmt->error . "</div>";
+        $update_message = "<div class='alert alert-danger'>更新失败：" . $conn->error . "</div>";
     }
-
-    $stmt->close();
 }
 
 /* --------------------------
