@@ -2,13 +2,14 @@
 require_once "auth/check.php";
 require_once "config/db.php"; //数据库连接
 require_once "config/permissions.php";
+require_once "config/i18n.php";
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
 
 <head>
     <meta charset="UTF-8">
-    <title>药品管理系统 - 首页</title>
+    <title><?= t("system_name") ?> - <?= t("dashboard_title") ?></title>
 
     <!-- Bootstrap -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -43,15 +44,20 @@ require_once "config/permissions.php";
     <div class="container mt-5">
 
         <div class="text-center mb-4">
-            <h1 class="fw-bold">药品管理系统</h1>
-            <p class="text-muted">请选择需要使用的功能</p>
+            <h1 class="fw-bold"><?= t("system_name") ?></h1>
+            <p class="text-muted"><?= t("select_feature") ?></p>
         </div>
 
         <div class="card shadow main-card p-4">
             
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h3>首页面板</h3>
-                <a href="auth/logout.php" class="btn btn-light btn-sm">退出</a>
+                <h3><?= t("dashboard_title") ?></h3>
+                <div class="d-flex align-items-center gap-2">
+                    <a class="text-white text-decoration-none" href="<?= language_switch_url("zh") ?>"><?= t("language_zh") ?></a>
+                    <span class="text-white-50">|</span>
+                    <a class="text-white text-decoration-none" href="<?= language_switch_url("en") ?>"><?= t("language_en") ?></a>
+                    <a href="auth/logout.php" class="btn btn-light btn-sm"><?= t("logout") ?></a>
+                </div>
             </div><br>
 
             <div class="row g-4">
@@ -62,7 +68,7 @@ require_once "config/permissions.php";
                         <a href="stock_list.php" class="text-decoration-none text-dark">
                             <div class="card menu-card p-3 shadow-sm">
                                 <div class="menu-icon text-primary text-center">📦</div>
-                                <h5 class="text-center mt-3">库存列表</h5>
+                            <h5 class="text-center mt-3"><?= t("stock_list") ?></h5>
                             </div>
                         </a>
                     </div>
@@ -73,7 +79,7 @@ require_once "config/permissions.php";
                         <a href="add_stock.php" class="text-decoration-none text-dark">
                             <div class="card menu-card p-3 shadow-sm">
                                 <div class="menu-icon text-success text-center">➕</div>
-                                <h5 class="text-center mt-3">添加库存</h5>
+                            <h5 class="text-center mt-3"><?= t("add_stock") ?></h5>
                             </div>
                         </a>
                     </div>
@@ -85,7 +91,7 @@ require_once "config/permissions.php";
                         <a href="batch_list.php" class="text-decoration-none text-dark">
                             <div class="card menu-card p-3 shadow-sm">
                                 <div class="menu-icon text-warning text-center">📋</div>
-                                <h5 class="text-center mt-3">批次列表</h5>
+                            <h5 class="text-center mt-3"><?= t("batch_list") ?></h5>
                             </div>
                         </a>
                     </div>
@@ -96,7 +102,7 @@ require_once "config/permissions.php";
                         <a href="add_batch.php" class="text-decoration-none text-dark">
                             <div class="card menu-card p-3 shadow-sm">
                                 <div class="menu-icon text-success text-center">➕</div>
-                                <h5 class="text-center mt-3">添加批次</h5>
+                            <h5 class="text-center mt-3"><?= t("add_batch") ?></h5>
                             </div>
                         </a>
                     </div>
@@ -108,7 +114,7 @@ require_once "config/permissions.php";
                         <a href="drugs_list.php" class="text-decoration-none text-dark">
                             <div class="card menu-card p-3 shadow-sm mt-3">
                                 <div class="menu-icon text-info text-center">💊</div>
-                                <h5 class="text-center mt-3">药品列表</h5>
+                            <h5 class="text-center mt-3"><?= t("drug_list") ?></h5>
                             </div>
                         </a>
                     </div>
@@ -119,7 +125,7 @@ require_once "config/permissions.php";
                         <a href="add_drug.php" class="text-decoration-none text-dark">
                             <div class="card menu-card p-3 shadow-sm mt-3">
                                 <div class="menu-icon text-success text-center">➕</div>
-                                <h5 class="text-center mt-3">添加药品</h5>
+                            <h5 class="text-center mt-3"><?= t("add_drug") ?></h5>
                             </div>
                         </a>
                     </div>
@@ -131,7 +137,7 @@ require_once "config/permissions.php";
                         <a href="location_list.php" class="text-decoration-none text-dark">
                             <div class="card menu-card p-3 shadow-sm mt-3">
                                 <div class="menu-icon text-secondary text-center">📍</div>
-                                <h5 class="text-center mt-3">位置列表</h5>
+                            <h5 class="text-center mt-3"><?= t("location_list") ?></h5>
                             </div>
                         </a>
                     </div>
@@ -142,7 +148,7 @@ require_once "config/permissions.php";
                         <a href="add_location.php" class="text-decoration-none text-dark">
                             <div class="card menu-card p-3 shadow-sm mt-3">
                                 <div class="menu-icon text-success text-center">➕</div>
-                                <h5 class="text-center mt-3">添加位置</h5>
+                            <h5 class="text-center mt-3"><?= t("add_location") ?></h5>
                             </div>
                         </a>
                     </div>
@@ -153,7 +159,7 @@ require_once "config/permissions.php";
                         <a href="notice_center.php" class="text-decoration-none text-dark">
                             <div class="card menu-card p-3 shadow-sm">
                                 <div class="menu-icon text-danger text-center">⚠️</div>
-                                <h5 class="text-center mt-3">药品提醒中心</h5>
+                            <h5 class="text-center mt-3"><?= t("notice_center") ?></h5>
                             </div>
                         </a>
                     </div>

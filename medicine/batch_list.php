@@ -51,7 +51,7 @@ if (isset($_GET['delete'])) {
     // 4. 最后删除批次记录
     $conn->query("DELETE FROM batches WHERE batch_id = $delete_id");
 
-    $delete_message = "<div class='alert alert-success'>批次记录已删除（已同步更新库存）。</div>";
+    $delete_message = "<div class='alert alert-success'>" . t("batch_deleted") . "</div>";
 }
 
 
@@ -78,7 +78,7 @@ $result = $conn->query($sql);
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <title>批次列表（有效期管理）</title>
+    <title><?= t("batch_list_title") ?></title>
 
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 </head>
@@ -88,45 +88,55 @@ $result = $conn->query($sql);
 
     <div class="card shadow">
         <div class="card-header bg-warning">
-            <h3>批次列表（有效期管理）</h3>
+            <h3><?= t("batch_list_title") ?></h3>
         </div>
 
         <div class="card-body">
 
             <?php echo $delete_message; ?>
 
-            <?php if (user_can("batch.manage")): ?>
-                <a href="add_batch.php" class="btn btn-primary mb-3">➕ 添加批次</a>
-            <?php endif; ?>
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                <div>
+                    <?php if (user_can("batch.manage")): ?>
+                        <a href="add_batch.php" class="btn btn-primary">➕ <?= t("add_batch") ?></a>
+                    <?php endif; ?>
+                </div>
+                <div>
+                    <a class="text-decoration-none" href="<?= language_switch_url("zh") ?>"><?= t("language_zh") ?></a>
+                    <span class="text-muted mx-1">|</span>
+                    <a class="text-decoration-none" href="<?= language_switch_url("en") ?>"><?= t("language_en") ?></a>
+                </div>
+            </div>
 
             <table class="table table-bordered table-striped align-middle">
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>
-                        <th>药品名称</th>
-                        <th>批号</th>
-                        <th>有效期</th>
-                        <th>剩余天数</th>
-                        <th>数量</th>
-                        <th style="width:150px;">操作</th>
+                        <th><?= t("drug_name") ?></th>
+                        <th><?= t("batch_number") ?></th>
+                        <th><?= t("expire_date") ?></th>
+                        <th><?= t("days_left") ?></th>
+                        <th><?= t("quantity") ?></th>
+                        <th style="width:150px;"><?= t("actions") ?></th>
                     </tr>
                 </thead>
 
                 <tbody>
                 <?php
-                while ($row = $result->fetch_assoc()):
+                if ($result->num_rows > 0):
+                    while ($row = $result->fetch_assoc()):
 
                     $days = $row['days_left'];
 
                     if ($days < 0) {
                         $row_class = "table-danger";     // 已过期
-                        $status = "已过期";
+                        $status = t("expired");
                     } elseif ($days <= 30) {
                         $row_class = "table-warning";     // 临期
-                        $status = "临期";
+                        $status = t("expiring_soon");
                     } else {
                         $row_class = "";
-                        $status = $days . " 天";
+                        $status = $days . " " . t("days");
                     }
 
                 ?>
@@ -142,25 +152,28 @@ $result = $conn->query($sql);
                             <?php if (user_can("batch.manage")): ?>
                                 <a class="btn btn-warning btn-sm"
                                     href="edit_batch.php?id=<?php echo $row['batch_id']; ?>">
-                                    编辑
+                                    <?= t("edit") ?>
                                 </a>
 
                                 <a class="btn btn-danger btn-sm"
-                                   onclick="return confirm('确定删除该批次？')"
+                                   onclick="return confirm('<?= t("confirm_delete_batch") ?>')"
                                    href="batch_list.php?delete=<?= $row['batch_id'] ?>">
-                                   删除
+                                   <?= t("delete") ?>
                                 </a>
                             <?php else: ?>
-                                <span class="text-muted">无权限</span>
+                                <span class="text-muted"><?= t("no_permission") ?></span>
                             <?php endif; ?>
                         </td>
                     </tr>
 
                 <?php endwhile; ?>
+                <?php else: ?>
+                    <tr><td colspan="7" class="text-center"><?= t("no_batch_records") ?></td></tr>
+                <?php endif; ?>
 
                 </tbody>
             </table>
-            <a href="dashboard.php" class="btn btn-secondary">返回</a>        
+            <a href="dashboard.php" class="btn btn-secondary"><?= t("return") ?></a>        
         </div>
     </div>
 
