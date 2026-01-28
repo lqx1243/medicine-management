@@ -117,7 +117,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`user_id`, `username`, `password_hash`, `role`, `created_at`) VALUES
 (1, 'Admin', '$2y$10$yMVbCEeLZHyo2W1jcFdC7OSFh9iQ/SRTFDWtWK0V0GQBKMlHPel5W', 'admin', '2025-12-02 01:04:21');
 INSERT INTO `users` (`user_id`, `username`, `password_hash`, `role`, `created_at`) VALUES
-(1, 'Viewer', '$2y$10$yMVbCEeLZHyo2W1jcFdC7OSFh9iQ/SRTFDWtWK0V0GQBKMlHPel5W', 'viewer', '2025-12-02 01:04:21');
+(2, 'Viewer', '$2y$10$yMVbCEeLZHyo2W1jcFdC7OSFh9iQ/SRTFDWtWK0V0GQBKMlHPel5W', 'viewer', '2025-12-02 01:04:21');
 
 --
 -- 转储表的索引
